@@ -6,23 +6,7 @@
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "32782134"
 	},
-	"variable": [
-		{
-			"key": "url",
-			"value": "https://api-stage.timetac.com",
-			"type": "string"
-		},
-		{
-			"key": "account",
-			"value": "igomsmokenext",
-			"type": "string"
-		},
-		{
-			"key": "version",
-			"value": "v5",
-			"type": "string"
-		}
-	],
+	"variable": [],
 	"event": [
 		{
 			"listen": "prerequest",
@@ -30,11 +14,11 @@
 				"type": "text/javascript",
 				"exec": [
 					"// Check if we already have a valid token",
-					"if (!pm.collectionVariables.get('access_token')) {",
+					"if (!pm.environment.get('access_token')) {",
 					"    console.log('Getting access token...');",
 					"    ",
 					"    pm.sendRequest({",
-					"        url: pm.collectionVariables.get('url') + '/' + pm.collectionVariables.get('account') + '/auth/oauth2/token',",
+					"        url: pm.environment.get('url') + '/' + pm.environment.get('account') + '/auth/oauth2/token',",
 					"        method: 'POST',",
 					"        header: {",
 					"            'Content-Type': 'application/x-www-form-urlencoded'",
@@ -43,10 +27,10 @@
 					"            mode: 'urlencoded',",
 					"            urlencoded: [",
 					"                {key: 'grant_type', value: 'password'},",
-					"                {key: 'username', value: 'noreply@timetac.com'},",
-					"                {key: 'password', value: '12345aC!'},",
-					"                {key: 'client_id', value: 'TT_WEB_APP'},",
-					"                {key: 'client_secret', value: 'VJqSS7WwbZ4PpkVW'}",
+					"                {key: 'username', value: pm.environment.get('username')},",
+					"                {key: 'password', value: pm.environment.get('password')},",
+					"                {key: 'client_id', value: pm.environment.get('client_id')},",
+					"                {key: 'client_secret', value: pm.environment.get('client_secret')}",
 					"            ]",
 					"        }",
 					"    }, function (err, response) {",
@@ -54,7 +38,7 @@
 					"            console.log('Error getting token:', err);",
 					"        } else if (response.code === 200) {",
 					"            var jsonData = response.json();",
-					"            pm.collectionVariables.set('access_token', jsonData.access_token);",
+					"            pm.environment.set('access_token', jsonData.access_token);",
 					"            console.log('Token obtained successfully');",
 					"        } else {",
 					"            console.log('Failed to get token. Status:', response.code);",
