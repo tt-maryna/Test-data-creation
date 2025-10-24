@@ -6,6 +6,23 @@
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "32782134"
 	},
+	"variable": [
+		{
+			"key": "url",
+			"value": "https://api-stage.timetac.com",
+			"type": "string"
+		},
+		{
+			"key": "account",
+			"value": "igomsmokenext",
+			"type": "string"
+		},
+		{
+			"key": "version",
+			"value": "v5",
+			"type": "string"
+		}
+	],
 	"event": [
 		{
 			"listen": "prerequest",
@@ -17,7 +34,7 @@
 					"    console.log('Getting access token...');",
 					"    ",
 					"    pm.sendRequest({",
-					"        url: 'https://api-stage.timetac.com/igomsmokenext/auth/oauth2/token',",
+					"        url: pm.collectionVariables.get('url') + '/' + pm.collectionVariables.get('account') + '/auth/oauth2/token',",
 					"        method: 'POST',",
 					"        header: {",
 					"            'Content-Type': 'application/x-www-form-urlencoded'",
@@ -294,16 +311,13 @@
 					]
 				},
 				"url": {
-					"raw": "https://api-stage.timetac.com/igomsmokenext/v4/timeTrackings/create/",
-					"protocol": "https",
+					"raw": "{{url}}/{{account}}/{{version}}/timeTrackings/create/",
 					"host": [
-						"api-stage",
-						"timetac",
-						"com"
+						"{{url}}"
 					],
 					"path": [
-						"igomsmokenext",
-						"v4",
+						"{{account}}",
+						"{{version}}",
 						"timeTrackings",
 						"create",
 						""
