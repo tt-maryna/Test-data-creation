@@ -1,0 +1,42 @@
+{
+  "id": "stage-env-id",
+  "name": "Stage Environment",
+  "values": [
+    {
+      "key": "url",
+      "value": "https://api-stage.timetac.com",
+      "enabled": true
+    },
+    {
+      "key": "account",
+      "value": "igomsmokenext",
+      "enabled": true
+    },
+    {
+      "key": "version",
+      "value": "v5",
+      "enabled": true
+    },
+    {
+      "key": "username", 
+      "value": "noreply@timetac.com",
+      "enabled": true
+    },
+    {
+      "key": "password",
+      "value": "12345aC!",
+      "enabled": true
+    },
+    {
+      "key": "client_id",
+      "value": "TT_WEB_APP",
+      "enabled": true
+    },
+    {
+      "key": "client_secret",
+      "value": "VJqSS7WwbZ4PpkVW",
+      "enabled": true
+    }
+  ],
+  "_postman_variable_scope": "environment"
+}
