@@ -1,0 +1,316 @@
+{
+	"info": {
+		"_postman_id": "09929353-3c0d-4840-8154-8697e335faeb",
+		"name": "Run collection with data file",
+		"description": "# 📁 Get started here\n\nThe _Postman Collection Runner_ enables you to run a collection's requests in a specified sequence. It also supports selecting a data file to let you use sets of values in a collection run.\n\nFor each row of data in the input file, Postman will:\n\n- Populate variables for each piece of data.\n    \n- Execute the requests in the collection with access to those variables.\n    \n\nThis powerful feature enables you to perform batch operations with dynamic data.\n\n## 🔖 How to use this template\n\n#### Step 1: Prepare the data file\n\nSave the data you want to use in a CSV file. For example, you can save a list of usernames and email addresses.\n\n```\nusername,email\njamilahassan,jamila.hassan123@example.com\nabdoulkone,abdoul.kone456@example.com\njessicakimani,jessica.kimani789@example.com\nmariobalotelli,mario.balotelli234@example.com\nkristianolsson,kristian.olsson567@example.com\njuliapark,julia.park890@example.com\nmohammedali,mohammed.ali1234@example.com\ncarolynwang,carolyn.wang567@example.com\nbenedicteik,benédicte.ik890@example.com\nrafaelcruz,rafael.cruz123@example.com\narjunsingh,arjun.singh456@example.com\nnatashapatel,natasha.patel789@example.com\nsamanthachen,samantha.chen234@example.com\nyoussefaziz,youssef.aziz567@example.com\namalasif,amal.asif890@example.com\nalishamalik,alisha.malik1234@example.com\njuanramirez,juan.ramirez567@example.com\nmarisalopez,marisa.lopez890@example.com\nhenrywang,henry.wang123@example.com\nandreasandersen,andreas.andersen456@example.com\n\n ```\n\n#### Step 2: Select the data file\n\nClick on \"Run\". Select the input data file you created in Step 1 by clicking \"Select File\". Update the other configuration if needed.\n\n<img src=\"https://content.pstmn.io/2720d8ee-6ddb-456e-a292-6ac02bf52dbc/U2NyZWVuc2hvdCAyMDIzLTA0LTEwIGF0IDYuMjcuMDcgUE0ucG5n\">\n\n#### Step 3: Preview the variable names and values\n\nBefore executing the requests, you can preview the variable names and values that will be set from the selected data file. You can consume these variables in requests just like any other variables. For example, you can use them in the URL:\n\n```\nhttps://postman-echo.com/get?username={{username}}\n\n ```\n\nOr in the request body:\n\n``` json\n{\n  username: \"{{username}}\"\n}\n\n ```\n\n#### Step 4: Execute requests using Collection Runner\n\nOnce you have reviewed the variables, you can execute the requests in the collection with the selected data file. Postman will populate variables for each piece of data and execute the requests using those variables.\n\n## ℹ️ Resources\n\n[Using the Collection Runner](https://learning.postman.com/docs/collections/running-collections/intro-to-collection-runs/)\n\n[Importing data files](https://learning.postman.com/docs/collections/running-collections/working-with-data-files/)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32782134"
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Check if we already have a valid token",
+					"if (!pm.collectionVariables.get('access_token')) {",
+					"    console.log('Getting access token...');",
+					"    ",
+					"    pm.sendRequest({",
+					"        url: 'https://api-stage.timetac.com/igomsmokenext/auth/oauth2/token',",
+					"        method: 'POST',",
+					"        header: {",
+					"            'Content-Type': 'application/x-www-form-urlencoded'",
+					"        },",
+					"        body: {",
+					"            mode: 'urlencoded',",
+					"            urlencoded: [",
+					"                {key: 'grant_type', value: 'password'},",
+					"                {key: 'username', value: 'noreply@timetac.com'},",
+					"                {key: 'password', value: '12345aC!'},",
+					"                {key: 'client_id', value: 'TT_WEB_APP'},",
+					"                {key: 'client_secret', value: 'VJqSS7WwbZ4PpkVW'}",
+					"            ]",
+					"        }",
+					"    }, function (err, response) {",
+					"        if (err) {",
+					"            console.log('Error getting token:', err);",
+					"        } else if (response.code === 200) {",
+					"            var jsonData = response.json();",
+					"            pm.collectionVariables.set('access_token', jsonData.access_token);",
+					"            console.log('Token obtained successfully');",
+					"        } else {",
+					"            console.log('Failed to get token. Status:', response.code);",
+					"        }",
+					"    });",
+					"}"
+				]
+			}
+		}
+	],
+	"item": [
+		{
+			"name": "create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    // Log the full response body",
+							"    console.log(\"Response body:\", pm.response.text());",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{access_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "user_id",
+							"value": "{{user_id}}",
+							"type": "text"
+						},
+						{
+							"key": "task_id",
+							"value": "{{task_id}}",
+							"type": "text"
+						},
+						{
+							"key": "start_time",
+							"value": "{{start_time}}",
+							"type": "text"
+						},
+						{
+							"key": "end_time",
+							"value": "{{end_time}}",
+							"type": "text"
+						},
+						{
+							"key": "start_time_timezone",
+							"value": "{{start_time_timezone}}",
+							"type": "text"
+						},
+						{
+							"key": "end_time_timezone",
+							"value": "{{end_time_timezone}}",
+							"type": "text"
+						},
+						{
+							"key": "nestedEntities",
+							"value": "{\"checkpointTrackings\":[{\"checkpoint_id\":1,\"timestamp\":\"2017-06-28 08:00:00\",\"timezone\":\"368\",\"geo_long\":2.4534545,\"geo_lang\":3.6456567567}]}",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "max_hours_alert",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "is_billable",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "notes",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "t_iv_1",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "t_iv_2",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "t_iv_3",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "t_iv_4",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "t_iv_5",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "t_iv_6",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "u_iv_1",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "u_iv_2",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "u_iv_3",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "u_iv_4",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "u_iv_5",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "u_iv_6",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "approved_by_admin",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "geo_start_lat",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "geo_start_long",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "geo_start_accuracy",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "geo_end_lat",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "geo_end_long",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "geo_end_accuracy",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "client_unique_id",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "start_type_id",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "end_type_id",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "_write_permission_type",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "_insert_into_conflicting",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "_is_offline_live_tracking",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "_request_user_comment",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "https://api-stage.timetac.com/igomsmokenext/v4/timeTrackings/create/",
+					"protocol": "https",
+					"host": [
+						"api-stage",
+						"timetac",
+						"com"
+					],
+					"path": [
+						"igomsmokenext",
+						"v4",
+						"timeTrackings",
+						"create",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
