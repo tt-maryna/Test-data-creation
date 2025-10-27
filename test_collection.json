@@ -51,264 +51,147 @@
 	],
 	"item": [
 		{
-			"name": "create",
-			"event": [
+			"name": "timetrackings",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    // Log the full response body",
-							"    console.log(\"Response body:\", pm.response.text());",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer {{access_token}}"
-					},
-					{
-						"key": "Content-Type",
-						"value": "application/x-www-form-urlencoded"
-					}
-				],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
+					"name": "create",
+					"event": [
 						{
-							"key": "user_id",
-							"value": "{{user_id}}",
-							"type": "text"
-						},
-						{
-							"key": "task_id",
-							"value": "{{task_id}}",
-							"type": "text"
-						},
-						{
-							"key": "start_time",
-							"value": "{{start_time}}",
-							"type": "text"
-						},
-						{
-							"key": "end_time",
-							"value": "{{end_time}}",
-							"type": "text"
-						},
-						{
-							"key": "start_time_timezone",
-							"value": "{{start_time_timezone}}",
-							"type": "text"
-						},
-						{
-							"key": "end_time_timezone",
-							"value": "{{end_time_timezone}}",
-							"type": "text"
-						},
-						{
-							"key": "nestedEntities",
-							"value": "{\"checkpointTrackings\":[{\"checkpoint_id\":1,\"timestamp\":\"2017-06-28 08:00:00\",\"timezone\":\"368\",\"geo_long\":2.4534545,\"geo_lang\":3.6456567567}]}",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "max_hours_alert",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "is_billable",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "notes",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "t_iv_1",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "t_iv_2",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "t_iv_3",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "t_iv_4",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "t_iv_5",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "t_iv_6",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "u_iv_1",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "u_iv_2",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "u_iv_3",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "u_iv_4",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "u_iv_5",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "u_iv_6",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "approved_by_admin",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "geo_start_lat",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "geo_start_long",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "geo_start_accuracy",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "geo_end_lat",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "geo_end_long",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "geo_end_accuracy",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "client_unique_id",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "start_type_id",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "end_type_id",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "_write_permission_type",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "_insert_into_conflicting",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "_is_offline_live_tracking",
-							"value": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "_request_user_comment",
-							"value": "",
-							"type": "text",
-							"disabled": true
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    // Log the full response body",
+									"    console.log(\"Response body:\", pm.response.text());",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
 						}
-					]
-				},
-				"url": {
-					"raw": "{{url}}/{{account}}/{{version}}/timeTrackings/create/",
-					"host": [
-						"{{url}}"
 					],
-					"path": [
-						"{{account}}",
-						"{{version}}",
-						"timeTrackings",
-						"create",
-						""
-					]
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "user_id",
+									"value": "{{user_id}}",
+									"type": "text"
+								},
+								{
+									"key": "task_id",
+									"value": "{{task_id}}",
+									"type": "text"
+								},
+								{
+									"key": "start_time",
+									"value": "{{start_time}}",
+									"type": "text"
+								},
+								{
+									"key": "end_time",
+									"value": "{{end_time}}",
+									"type": "text"
+								},
+								{
+									"key": "start_time_timezone",
+									"value": "{{start_time_timezone}}",
+									"type": "text"
+								},
+								{
+									"key": "end_time_timezone",
+									"value": "{{end_time_timezone}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/{{account}}/{{version}}/timeTrackings/create/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"{{account}}",
+								"{{version}}",
+								"timeTrackings",
+								"create",
+								""
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
+		},
+		{
+			"name": "departments",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "department_name",
+									"value": "{{department_name}}",
+									"type": "text"
+								},
+								{
+									"key": "mother_id",
+									"value": "{{mother_id}}",
+									"type": "text"
+								},
+								{
+									"key": "supervisor_id",
+									"value": "{{supervisor_id}}",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "supervisor_assistant_id",
+									"value": "{{supervisor_assistant_id}}",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/{{account}}/{{version}}/departments/create/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"{{account}}",
+								"{{version}}",
+								"departments",
+								"create",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
