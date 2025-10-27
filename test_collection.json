@@ -192,6 +192,91 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email_address",
+									"value": "{{email_address}}",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "text"
+								},
+								{
+									"key": "department_id",
+									"value": "{{department_id}}",
+									"type": "text"
+								},
+								{
+									"key": "lastname",
+									"value": "{{lastname}}",
+									"type": "text"
+								},
+								{
+									"key": "firstname",
+									"value": "{{firstname}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345aC!",
+									"type": "text"
+								},
+								{
+									"key": "language_id",
+									"value": "{{language_id}}",
+									"type": "text"
+								},
+								{
+									"key": "internal_user_group",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "timesheet_template_id",
+									"value": "{{timesheet_template_id}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/{{account}}/{{version}}/users/create/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"{{account}}",
+								"{{version}}",
+								"users",
+								"create",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
