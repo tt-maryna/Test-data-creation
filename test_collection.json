@@ -197,7 +197,115 @@
 			"name": "users",
 			"item": [
 				{
+					"name": "read-departments",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Store department IDs for use in user creation",
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.Success && jsonData.Results) {",
+									"        var departmentIds = jsonData.Results.map(dept => dept.id);",
+									"        pm.environment.set('available_department_ids', JSON.stringify(departmentIds));",
+									"        console.log('Available department IDs:', departmentIds);",
+									"    } else {",
+									"        console.log('Failed to get departments, will use default department_id=1');",
+									"        pm.environment.set('available_department_ids', '[1]');",
+									"    }",
+									"} else {",
+									"    console.log('Departments request failed, will use default department_id=1');",
+									"    pm.environment.set('available_department_ids', '[1]');",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/{{account}}/{{version}}/departments/read/?active=true",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"{{account}}",
+								"{{version}}",
+								"departments",
+								"read",
+								""
+							],
+							"query": [
+								{
+									"key": "active",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "create",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Check if department_id is provided in the data file",
+									"var departmentId = pm.iterationData.get('department_id');",
+									"",
+									"// If department_id is missing, empty, or null, assign a random one",
+									"if (!departmentId || departmentId === '' || departmentId === null) {",
+									"    console.log('Department ID not provided in data, selecting random...');",
+									"    ",
+									"    // Get available department IDs from environment (set by read-departments request)",
+									"    var availableDeptIds = pm.environment.get('available_department_ids');",
+									"    ",
+									"    if (availableDeptIds) {",
+									"        try {",
+									"            var deptIdsArray = JSON.parse(availableDeptIds);",
+									"            if (deptIdsArray && deptIdsArray.length > 0) {",
+									"                // Select a random department ID",
+									"                var randomIndex = Math.floor(Math.random() * deptIdsArray.length);",
+									"                var selectedDeptId = deptIdsArray[randomIndex];",
+									"                pm.variables.set('department_id', selectedDeptId);",
+									"                console.log('Selected random department_id:', selectedDeptId);",
+									"            } else {",
+									"                // Fallback to default",
+									"                pm.variables.set('department_id', '1');",
+									"                console.log('No departments available, using default department_id: 1');",
+									"            }",
+									"        } catch (e) {",
+									"            // Fallback to default if JSON parsing fails",
+									"            pm.variables.set('department_id', '1');",
+									"            console.log('Error parsing department IDs, using default department_id: 1');",
+									"        }",
+									"    } else {",
+									"        // Fallback to default if no departments data available",
+									"        pm.variables.set('department_id', '1');",
+									"        console.log('No departments data available, using default department_id: 1');",
+									"    }",
+									"} else {",
+									"    // Use the department_id from the data file",
+									"    pm.variables.set('department_id', departmentId);",
+									"    console.log('Using department_id from data file:', departmentId);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
