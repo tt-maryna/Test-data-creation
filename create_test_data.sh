@@ -6,6 +6,7 @@ export NODE_EXTRA_CA_CERTS="./timetac-dev-ca.crt"
 # Collection and environment files
 COLLECTION="test_collection.json"
 ENVIRONMENT="stage-env.json"
+OUTPUT_FILE="output.txt"
 
 # Define folder-to-data-file mappings
 declare -A FOLDER_DATA_MAP=(
@@ -14,20 +15,31 @@ declare -A FOLDER_DATA_MAP=(
     ["users"]="users.json"
 )
 
+# Logging function
+log() {
+    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    echo "[$timestamp] $1" | tee -a "$OUTPUT_FILE"
+}
+
+# Log without timestamp (for formatting)
+log_plain() {
+    echo "$1" | tee -a "$OUTPUT_FILE"
+}
+
 # Function to display usage
 show_usage() {
-    echo "Usage: $0 [folder1] [folder2] [folder3] ..."
-    echo ""
-    echo "Available folders:"
+    log_plain "Usage: $0 [folder1] [folder2] [folder3] ..."
+    log_plain ""
+    log_plain "Available folders:"
     for folder in "${!FOLDER_DATA_MAP[@]}"; do
-        echo "  - $folder (uses ${FOLDER_DATA_MAP[$folder]})"
+        log_plain "  - $folder (uses ${FOLDER_DATA_MAP[$folder]})"
     done
-    echo ""
-    echo "Examples:"
-    echo "  $0 users                    # Run only users folder"
-    echo "  $0 departments users        # Run departments and users folders"
-    echo "  $0 timetrackings departments users  # Run all three folders"
-    echo ""
+    log_plain ""
+    log_plain "Examples:"
+    log_plain "  $0 users                    # Run only users folder"
+    log_plain "  $0 departments users        # Run departments and users folders"
+    log_plain "  $0 timetrackings departments users  # Run all three folders"
+    log_plain ""
 }
 
 # Function to run newman for a specific folder
@@ -36,47 +48,57 @@ run_folder() {
     local data_file=${FOLDER_DATA_MAP[$folder]}
     
     if [[ -z "$data_file" ]]; then
-        echo "❌ Error: Unknown folder '$folder'"
+        log "❌ Error: Unknown folder '$folder'"
         return 1
     fi
     
     if [[ ! -f "$data_file" ]]; then
-        echo "❌ Error: Data file '$data_file' not found for folder '$folder'"
+        log "❌ Error: Data file '$data_file' not found for folder '$folder'"
         return 1
     fi
     
-    echo "🚀 Running folder: $folder with data file: $data_file"
-    echo "▶️  Command: newman run $COLLECTION -e $ENVIRONMENT -d $data_file --folder \"$folder\""
-    echo ""
+    log "🚀 Running folder: $folder with data file: $data_file"
+    log "▶️  Command: newman run $COLLECTION -e $ENVIRONMENT -d $data_file --folder \"$folder\" --verbose"
+    log_plain ""
     
-    newman run "$COLLECTION" -e "$ENVIRONMENT" -d "$data_file" --folder "$folder"
+    # Run newman with verbose output to capture request/response details
+    newman run "$COLLECTION" -e "$ENVIRONMENT" -d "$data_file" --folder "$folder" \
+        --verbose 2>&1 | tee -a "$OUTPUT_FILE"
     
-    local exit_code=$?
+    local exit_code=${PIPESTATUS[0]}
+    
     if [[ $exit_code -eq 0 ]]; then
-        echo "✅ Completed: $folder"
+        log "✅ Completed: $folder"
     else
-        echo "❌ Failed: $folder (exit code: $exit_code)"
+        log "❌ Failed: $folder (exit code: $exit_code)"
     fi
-    echo ""
-    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo ""
+    log_plain ""
+    log_plain "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    log_plain ""
     
     return $exit_code
 }
 
 # Main script logic
 main() {
+    # Clear/create output file at the start
+    > "$OUTPUT_FILE"
+    
+    log "🔄 Starting test data creation script..."
+    log "📝 Output will be logged to: $OUTPUT_FILE"
+    log_plain ""
+    
     # Check if newman is installed
     if ! command -v newman &> /dev/null; then
-        echo "❌ Error: Newman is not installed or not in PATH"
-        echo "Install with: npm install -g newman"
+        log "❌ Error: Newman is not installed or not in PATH"
+        log "Install with: npm install -g newman"
         exit 1
     fi
     
     # Check if no arguments provided
     if [[ $# -eq 0 ]]; then
-        echo "❌ Error: No folders specified"
-        echo ""
+        log "❌ Error: No folders specified"
+        log_plain ""
         show_usage
         exit 1
     fi
@@ -89,22 +111,22 @@ main() {
     
     # Check if collection and environment files exist
     if [[ ! -f "$COLLECTION" ]]; then
-        echo "❌ Error: Collection file '$COLLECTION' not found"
+        log "❌ Error: Collection file '$COLLECTION' not found"
         exit 1
     fi
     
     if [[ ! -f "$ENVIRONMENT" ]]; then
-        echo "❌ Error: Environment file '$ENVIRONMENT' not found"
+        log "❌ Error: Environment file '$ENVIRONMENT' not found"
         exit 1
     fi
     
-    echo "📋 Running Newman with:"
-    echo "   Collection: $COLLECTION"
-    echo "   Environment: $ENVIRONMENT"
-    echo "   Folders to run: $*"
-    echo ""
-    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo ""
+    log "📋 Running Newman with:"
+    log "   Collection: $COLLECTION"
+    log "   Environment: $ENVIRONMENT"
+    log "   Folders to run: $*"
+    log_plain ""
+    log_plain "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    log_plain ""
     
     local total_folders=$#
     local successful_folders=0
@@ -121,10 +143,12 @@ main() {
     done
     
     # Summary
-    echo "📊 SUMMARY:"
-    echo "   Total folders: $total_folders"
-    echo "   Successful: $successful_folders"
-    echo "   Failed: $failed_folders"
+    log "📊 SUMMARY:"
+    log "   Total folders: $total_folders"
+    log "   Successful: $successful_folders"
+    log "   Failed: $failed_folders"
+    log_plain ""
+    log "🏁 Script execution completed at $(date '+%Y-%m-%d %H:%M:%S')"
     
     if [[ $failed_folders -gt 0 ]]; then
         exit 1
