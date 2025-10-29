@@ -1,7 +1,7 @@
 [
   {
-    "email_address": "sarah.johnson@timetac.com",
-    "username": "sarah.johnson@timetac.com",
+    "email_address": "sarah.johnson1@timetac.com",
+    "username": "sarah.johnson1@timetac.com",
     "department_id": "1",
     "lastname": "Johnson",
     "firstname": "Sarah",
@@ -9,20 +9,19 @@
     "timesheet_template_id": "4"
   },
   {
-    "email_address": "michael.davis@timetac.com",
-    "username": "michael.davis@timetac.com",
+    "email_address": "michael.davis1@timetac.com",
+    "username": "michael.davis1@timetac.com",
     "lastname": "Davis",
     "firstname": "Michael",
-    "language_id": "2",
-    "timesheet_template_id": "4"
+    "language_id": "2"
   },
   {
-    "email_address": "lisa.white@timetac.com",
-    "username": "lisa.white@timetac.com",
+    "email_address": "lisa.white1@timetac.com",
+    "username": "lisa.white1@timetac.com",
     "department_id": "",
     "lastname": "White",
     "firstname": "Lisa",
     "language_id": "1",
-    "timesheet_template_id": "4"
+    "timesheet_template_id": ""
   }
 ]

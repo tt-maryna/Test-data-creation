@@ -194,6 +194,76 @@
 			]
 		},
 		{
+			"name": "tasks",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "mother_id",
+									"value": "{{mother_id}}",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "{{name}}",
+									"type": "text"
+								},
+								{
+									"key": "is_billable",
+									"value": "{{is_billable}}",
+									"type": "text"
+								},
+								{
+									"key": "is_paid_non_working",
+									"value": "{{is_paid_non_working}}",
+									"type": "text"
+								},
+								{
+									"key": "is_nonworking",
+									"value": "{{is_nonworking}}",
+									"type": "text"
+								},
+								{
+									"key": "task_type",
+									"value": "{{task_type}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/{{account}}/{{version}}/tasks/create/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"{{account}}",
+								"{{version}}",
+								"tasks",
+								"create",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "users",
 			"item": [
 				{
@@ -255,17 +325,73 @@
 					"response": []
 				},
 				{
+					"name": "read-workschedules",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Store workschedule IDs for use in user creation",
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.Success && jsonData.Results) {",
+									"        var workscheduleIds = jsonData.Results.map(ws => ws.id);",
+									"        pm.environment.set('available_workschedule_ids', JSON.stringify(workscheduleIds));",
+									"        console.log('Available workschedule IDs:', workscheduleIds);",
+									"    } else {",
+									"        console.log('Failed to get workschedules, will use default timesheet_template_id=4');",
+									"        pm.environment.set('available_workschedule_ids', '[4]');",
+									"    }",
+									"} else {",
+									"    console.log('Workschedules request failed, will use default timesheet_template_id=4');",
+									"    pm.environment.set('available_workschedule_ids', '[4]');",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/{{account}}/{{version}}/workSchedules/read/?active=true",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"{{account}}",
+								"{{version}}",
+								"workSchedules",
+								"read",
+								""
+							],
+							"query": [
+								{
+									"key": "active",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "create",
 					"event": [
 						{
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"// Check if department_id is provided in the data file",
-									"var departmentId = pm.iterationData.get('department_id');",
-									"",
-									"// If department_id is missing, empty, or null, assign a random one",
-									"if (!departmentId || departmentId === '' || departmentId === null) {",
+									"// Handle department_id assignment",
+									"if (!pm.iterationData.has('department_id')) {",
+									"    // Field not sent at all - assign random value",
 									"    console.log('Department ID not provided in data, selecting random...');",
 									"    ",
 									"    // Get available department IDs from environment (set by read-departments request)",
@@ -296,9 +422,65 @@
 									"        console.log('No departments data available, using default department_id: 1');",
 									"    }",
 									"} else {",
-									"    // Use the department_id from the data file",
-									"    pm.variables.set('department_id', departmentId);",
-									"    console.log('Using department_id from data file:', departmentId);",
+									"    // Field is present in data",
+									"    var departmentId = pm.iterationData.get('department_id');",
+									"    ",
+									"    if (departmentId === '' || departmentId === null) {",
+									"        // Field sent but empty - use default value 1",
+									"        pm.variables.set('department_id', '1');",
+									"        console.log('Department ID is empty in data file, using default: 1');",
+									"    } else {",
+									"        // Field sent with value - use it",
+									"        pm.variables.set('department_id', departmentId);",
+									"        console.log('Using department_id from data file:', departmentId);",
+									"    }",
+									"}",
+									"",
+									"// Handle timesheet_template_id assignment",
+									"if (!pm.iterationData.has('timesheet_template_id')) {",
+									"    // Field not sent at all - assign random value",
+									"    console.log('Timesheet template ID not provided in data, selecting random...');",
+									"    ",
+									"    // Get available workschedule IDs from environment (set by read-workschedules request)",
+									"    var availableWsIds = pm.environment.get('available_workschedule_ids');",
+									"    ",
+									"    if (availableWsIds) {",
+									"        try {",
+									"            var wsIdsArray = JSON.parse(availableWsIds);",
+									"            if (wsIdsArray && wsIdsArray.length > 0) {",
+									"                // Select a random workschedule ID",
+									"                var randomIndex = Math.floor(Math.random() * wsIdsArray.length);",
+									"                var selectedWsId = wsIdsArray[randomIndex];",
+									"                pm.variables.set('timesheet_template_id', selectedWsId);",
+									"                console.log('Selected random timesheet_template_id:', selectedWsId);",
+									"            } else {",
+									"                // Fallback to default",
+									"                pm.variables.set('timesheet_template_id', '1');",
+									"                console.log('No workschedules available, using default timesheet_template_id: 1');",
+									"            }",
+									"        } catch (e) {",
+									"            // Fallback to default if JSON parsing fails",
+									"            pm.variables.set('timesheet_template_id', '1');",
+									"            console.log('Error parsing workschedule IDs, using default timesheet_template_id: 1');",
+									"        }",
+									"    } else {",
+									"        // Fallback to default if no workschedules data available",
+									"        pm.variables.set('timesheet_template_id', '1');",
+									"        console.log('No workschedules data available, using default timesheet_template_id: 1');",
+									"    }",
+									"} else {",
+									"    // Field is present in data",
+									"    var timesheetTemplateId = pm.iterationData.get('timesheet_template_id');",
+									"    ",
+									"    if (timesheetTemplateId === '' || timesheetTemplateId === null) {",
+									"        // Field sent but empty - use default value 1",
+									"        pm.variables.set('timesheet_template_id', '1');",
+									"        console.log('Timesheet template ID is empty in data file, using default: 1');",
+									"    } else {",
+									"        // Field sent with value - use it",
+									"        pm.variables.set('timesheet_template_id', timesheetTemplateId);",
+									"        console.log('Using timesheet_template_id from data file:', timesheetTemplateId);",
+									"    }",
 									"}"
 								],
 								"type": "text/javascript",

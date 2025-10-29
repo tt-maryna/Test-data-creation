@@ -1,0 +1,26 @@
+[
+  {
+    "mother_id": "3",
+    "name": "Software Development",
+    "is_billable": "true",
+    "is_paid_non_working": "false",
+    "is_nonworking": "false",
+    "task_type": "is_billable"
+  },
+  {
+    "mother_id": "3",
+    "name": "Project Management",
+    "is_billable": "true",
+    "is_paid_non_working": "false",
+    "is_nonworking": "false",
+    "task_type": "is_billable"
+  },
+  {
+    "mother_id": "3",
+    "name": "Client Consultation",
+    "is_billable": "true",
+    "is_paid_non_working": "false",
+    "is_nonworking": "false",
+    "task_type": "is_billable"
+  }
+]
