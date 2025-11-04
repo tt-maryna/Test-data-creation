@@ -8,12 +8,12 @@ COLLECTION="test_collection.json"
 ENVIRONMENT="stage-env.json"
 OUTPUT_FILE="output.txt"
 
-# Define folder-to-data-file mappings
+# Define folder-to-data-file mappings (now in test_data/ subdirectory)
 declare -A FOLDER_DATA_MAP=(
-    ["timetrackings"]="timetrackings.json"
-    ["departments"]="departments.json"
-    ["users"]="users.json"
-    ["tasks"]="tasks.json"
+    ["timetrackings"]="test_data/timetrackings.json"
+    ["departments"]="test_data/departments.json"
+    ["users"]="test_data/users.json"
+    ["tasks"]="test_data/tasks.json"
 )
 
 # Logging function

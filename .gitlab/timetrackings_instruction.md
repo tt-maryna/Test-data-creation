@@ -27,9 +27,9 @@ The file should contain a JSON array of timetracking objects. Each timetracking 
 
 ### Task ID (`task_id`)
 - Must reference an existing task in the system
-- Common values:
-  - `"4"` = Regular work task
-  - `"9"` = Break/pause task
+- **Standard values**:
+  - `"4"` = Default work task (use by default for all work activities if ids are not specified)
+  - `"9"` = Break/pause task (always use for breaks)
 - Must be string format: `"4"`
 
 ### Time Format
@@ -139,9 +139,8 @@ The collection includes intelligent timezone handling:
 6. **Total**: 8 hours work + 30-60 minutes breaks
 
 ### Task Assignment Rules
-- **Flexible Task Switching**: You can switch between different work tasks throughout the day as needed
-- **Use Available Task IDs**: Switch between any available work task IDs based on project requirements
-- **Break Tasks Separate**: Only use break/pause tasks (task_id "9") for actual breaks
+- **Default Work Task**: Always use task ID `"4"` for work activities unless specifically required otherwise
+- **Break Tasks**: Always use task ID `"9"` for all breaks and pauses
 - **Break Duration Rules**:
   - Total break time: 30-60 minutes per day
   - Can be divided into 2-3 separate breaks
@@ -171,7 +170,7 @@ The collection includes intelligent timezone handling:
   },
   {
     "user_id": "1",
-    "task_id": "5",
+    "task_id": "4",
     "start_time": "2025-06-02 10:45:00",
     "end_time": "2025-06-02 13:00:00"
   },
@@ -190,7 +189,7 @@ The collection includes intelligent timezone handling:
 ]
 ```
 
-*Note: Work tasks are 2.5h, 2.25h, and 3.25h (within 30min-3h range). Two breaks total 45 minutes (within 30-60min range). Day starts and ends with work tasks.*
+*Note: Work tasks use task ID "4" with durations of 2.5h, 2.25h, and 3.25h (within 30min-3h range). Two breaks use task ID "9" totaling 45 minutes (within 30-60min range). Day starts and ends with work tasks.*
 
 ## Date Planning Guidelines
 
@@ -425,12 +424,12 @@ June 2025 Working Days:
 // ❌ Too much break time
 {"user_id": "1", "task_id": "9", "start_time": "2025-06-02 12:00:00", "end_time": "2025-06-02 13:30:00"} // Bad: 90 minutes
 
-// ✅ Flexible task switching throughout day
+// ✅ Standard daily pattern with task IDs 4 and 9
 {"user_id": "1", "task_id": "4", "start_time": "2025-06-02 09:00:00", "end_time": "2025-06-02 11:00:00"},
 {"user_id": "1", "task_id": "9", "start_time": "2025-06-02 11:00:00", "end_time": "2025-06-02 11:15:00"},
-{"user_id": "1", "task_id": "5", "start_time": "2025-06-02 11:15:00", "end_time": "2025-06-02 13:45:00"},
+{"user_id": "1", "task_id": "4", "start_time": "2025-06-02 11:15:00", "end_time": "2025-06-02 13:45:00"},
 {"user_id": "1", "task_id": "9", "start_time": "2025-06-02 13:45:00", "end_time": "2025-06-02 14:15:00"},
-{"user_id": "1", "task_id": "7", "start_time": "2025-06-02 14:15:00", "end_time": "2025-06-02 17:00:00"} // Good: proper structure and durations
+{"user_id": "1", "task_id": "4", "start_time": "2025-06-02 14:15:00", "end_time": "2025-06-02 17:00:00"} // Good: proper structure and durations
 ```
 
 ## Bulk Generation Strategies
