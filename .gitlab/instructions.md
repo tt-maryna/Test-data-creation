@@ -3,6 +3,63 @@
 ## Overview
 This document provides context about a Time Tracking API based on the Postman collection `test.postman_collection.json`. Use this information to understand the API structure, endpoints, and parameters when generating code or providing suggestions.
 
+## TestProject Structure
+
+The TestProject is organized as follows:
+
+```
+TestProject/
+├── .gitlab/
+│   ├── instructions.md                # Instructions for generating each test data file
+│   ├── API_CONTEXT.md                 # API documentation and context
+│   ├── users_instruction.md           # Instructions for generating users.json
+│   └── timetrackings_instruction.md   # Instructions for generating timetrackings.json
+├── test_data/
+│   ├── departments.json               # Test data for departments endpoint
+│   ├── tasks.json                     # Test data for tasks endpoint
+│   ├── timetrackings.json            # Test data for timetrackings endpoint
+│   └── users.json                     # Test data for users endpoint
+├── stage-env.json                     # Global environment variables for collection
+├── test_collection.json               # Postman collection with API requests
+├── timetac-dev-ca.crt                # Timetac certificate for secure Newman execution
+└── create_test_data.sh               # Bash script for automated request execution
+```
+
+### Folder and File Descriptions:
+
+#### `.gitlab/` Directory
+- **Purpose**: Contains all instructions and documentation for test data generation
+- **Key Files**: 
+  - `instructions.md` - comprehensive guide for generating each test data file
+  - `API_CONTEXT.md` - API documentation and context
+  - `users_instruction.md` - instructions for generating users.json
+  - `timetrackings_instruction.md` - instructions for generating timetrackings.json
+
+#### `test_data/` Directory  
+- **Purpose**: Contains JSON test data files for each API endpoint
+- **Structure**: One file per endpoint/request from the collection
+- **Files**:
+  - `departments.json` - Department creation data
+  - `tasks.json` - Task creation data
+  - `timetrackings.json` - Time tracking entries data
+  - `users.json` - User creation data
+
+#### Core Configuration Files
+- **`stage-env.json`**: Global environment variables used throughout the collection
+- **`test_collection.json`**: Main Postman collection containing all API requests and smart logic
+- **`timetac-dev-ca.crt`**: SSL certificate required for secure Newman command execution
+
+#### Automation Scripts
+- **`create_test_data.sh`**: Bash script for automated execution of multiple requests using Newman CLI
+
+### Usage Workflow:
+1. **Configure Environment**: Set variables in `stage-env.json`
+2. **Prepare Data**: Create/modify JSON files in `test_data/` directory
+3. **Execute Requests**: Run `./create_test_data.sh [endpoint]` for automated testing
+4. **Monitor Results**: Check logs and responses for validation
+
+This structure enables efficient API testing with organized data files, comprehensive documentation, and automated execution capabilities.
+
 ## Base URL Structure
 - Base URL: `{{url}}/{{account}}/{{version}}/` or `{{url}}/{{account}}/userapi/{{version}}/`
 - Variables:

@@ -1,0 +1,25 @@
+[
+  {
+    "email_address": "anna.mueller@timetac.com",
+    "username": "anna.mueller@timetac.com",
+    "department_id": "77",
+    "lastname": "Mueller",
+    "firstname": "Anna",
+    "language_id": "2"
+  },
+  {
+    "email_address": "carlos.rodriguez@timetac.com",
+    "username": "carlos.rodriguez@timetac.com",
+    "lastname": "Rodriguez",
+    "firstname": "Carlos",
+    "language_id": "1"
+  },
+  {
+    "email_address": "emma.watson@timetac.com",
+    "username": "emma.watson@timetac.com",
+    "department_id": "",
+    "lastname": "Watson",
+    "firstname": "Emma",
+    "language_id": "2"
+  }
+]

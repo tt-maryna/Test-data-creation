@@ -9,7 +9,7 @@
     },
     {
       "key": "account",
-      "value": "igomsmokenext",
+      "value": "igomnextplus",
       "enabled": true
     },
     {
@@ -29,12 +29,12 @@
     },
     {
       "key": "client_id",
-      "value": "TT_WEB_APP",
+      "value": "WEB",
       "enabled": true
     },
     {
       "key": "client_secret",
-      "value": "VJqSS7WwbZ4PpkVW",
+      "value": "997a4761c723a56ac4a2a3de7fa6e03bdab59db4a8929fcb9641f8a25224476c",
       "enabled": true
     }
   ],

@@ -52,6 +52,39 @@
 	"item": [
 		{
 			"name": "timetrackings",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"// Handle start_time_timezone assignment",
+							"if (!pm.iterationData.has('start_time_timezone')) {",
+							"    // Field not sent at all - use default Europe/Vienna",
+							"    pm.variables.set('start_time_timezone', 'Europe/Vienna');",
+							"    console.log('Start timezone not provided in data, using default: Europe/Vienna');",
+							"} else {",
+							"    // Field is present in data - use it",
+							"    var startTimezone = pm.iterationData.get('start_time_timezone');",
+							"    pm.variables.set('start_time_timezone', startTimezone);",
+							"    console.log('Using start_time_timezone from data file:', startTimezone);",
+							"}",
+							"",
+							"// Handle end_time_timezone assignment",
+							"if (!pm.iterationData.has('end_time_timezone')) {",
+							"    // Field not sent at all - use default Europe/Vienna",
+							"    pm.variables.set('end_time_timezone', 'Europe/Vienna');",
+							"    console.log('End timezone not provided in data, using default: Europe/Vienna');",
+							"} else {",
+							"    // Field is present in data - use it",
+							"    var endTimezone = pm.iterationData.get('end_time_timezone');",
+							"    pm.variables.set('end_time_timezone', endTimezone);",
+							"    console.log('Using end_time_timezone from data file:', endTimezone);",
+							"}"
+						]
+					}
+				}
+			],
 			"item": [
 				{
 					"name": "create",
