@@ -231,6 +231,100 @@
 			"item": [
 				{
 					"name": "create",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// ==================================================================================",
+									"// SMART ASSIGNMENT LOGIC FOR TASK-PROJECT RELATIONSHIPS",
+									"// ==================================================================================",
+									"// This prerequest script implements intelligent mother_id assignment for tasks:",
+									"//",
+									"// 1. DYNAMIC ASSIGNMENT: When mother_id is not specified in task data,",
+									"//    automatically use project IDs extracted from previously created projects",
+									"//    in the same script execution (passed via global variable 'extracted_project_ids')",
+									"//",
+									"// 2. FALLBACK DEFAULT: When no extracted project IDs are available,", 
+									"//    use mother_id = 3 (General Tasks project) as a safe default",
+									"//",
+									"// 3. EXPLICIT OVERRIDE: When mother_id is provided in task data,",
+									"//    use the exact value specified, bypassing all smart assignment",
+									"//",
+									"// This enables workflows like: './create_test_data.sh projects tasks'", 
+									"// where tasks automatically inherit from newly created projects.",
+									"// ==================================================================================",
+									"",
+									"// Handle mother_id assignment with smart logic",
+									"if (!pm.iterationData.has('mother_id')) {",
+									"    // Field not sent at all - try to use extracted project IDs",
+									"    console.log('Mother ID not provided in data, checking for extracted project IDs...');",
+									"    ",
+									"    // Check if we have extracted project IDs from output.txt",
+									"    var extractedProjectIds = pm.globals.get('extracted_project_ids');",
+									"    ",
+									"    if (extractedProjectIds) {",
+									"        try {",
+									"            var projectIdsArray = JSON.parse(extractedProjectIds);",
+									"            if (projectIdsArray && projectIdsArray.length > 0) {",
+									"                // Select a random project ID from extracted ones",
+									"                var randomIndex = Math.floor(Math.random() * projectIdsArray.length);",
+									"                var selectedProjectId = projectIdsArray[randomIndex];",
+									"                pm.variables.set('mother_id', selectedProjectId);",
+									"                console.log('Selected random mother_id from extracted IDs:', selectedProjectId);",
+									"            } else {",
+									"                // Fallback to default",
+									"                pm.variables.set('mother_id', '3');",
+									"                console.log('No extracted project IDs available, using default mother_id: 3');",
+									"            }",
+									"        } catch (e) {",
+									"            // Fallback to default if JSON parsing fails",
+									"            pm.variables.set('mother_id', '3');",
+									"            console.log('Error parsing extracted project IDs, using default mother_id: 3');",
+									"        }",
+									"    } else {",
+									"        // Fallback to default if no extracted data available",
+									"        pm.variables.set('mother_id', '3');",
+									"        console.log('No extracted project IDs available, using default mother_id: 3');",
+									"    }",
+									"} else {",
+									"    // Field is present in data",
+									"    var motherId = pm.iterationData.get('mother_id');",
+									"    ",
+									"    if (motherId === '' || motherId === null) {",
+									"        // Field sent but empty - try to use extracted project IDs",
+									"        var extractedProjectIds = pm.globals.get('extracted_project_ids');",
+									"        if (extractedProjectIds) {",
+									"            try {",
+									"                var projectIdsArray = JSON.parse(extractedProjectIds);",
+									"                if (projectIdsArray && projectIdsArray.length > 0) {",
+									"                    var randomIndex = Math.floor(Math.random() * projectIdsArray.length);",
+									"                    var selectedProjectId = projectIdsArray[randomIndex];",
+									"                    pm.variables.set('mother_id', selectedProjectId);",
+									"                    console.log('Mother ID is empty in data file, using extracted project_id:', selectedProjectId);",
+									"                } else {",
+									"                    pm.variables.set('mother_id', '3');",
+									"                    console.log('No extracted project IDs available, using default mother_id: 3');",
+									"                }",
+									"            } catch (e) {",
+									"                pm.variables.set('mother_id', '3');",
+									"                console.log('Error parsing extracted project IDs, using default mother_id: 3');",
+									"            }",
+									"        } else {",
+									"            pm.variables.set('mother_id', '3');",
+									"            console.log('No extracted project IDs available, using default mother_id: 3');",
+									"        }",
+									"    } else {",
+									"        // Field sent with value - use it exactly",
+									"        pm.variables.set('mother_id', motherId);",
+									"        console.log('Using mother_id from data file:', motherId);",
+									"    }",
+									"}"
+								]
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -592,6 +686,93 @@
 								"{{account}}",
 								"{{version}}",
 								"users",
+								"create",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "projects",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"// Handle status assignment",
+							"if (!pm.iterationData.has('status')) {",
+							"    // Field not sent at all - use default status 2 (ACTIVE)",
+							"    pm.variables.set('status', '2');",
+							"    console.log('Status not provided in data, using default: 2 (ACTIVE)');",
+							"} else {",
+							"    // Field is present in data - use it",
+							"    var status = pm.iterationData.get('status');",
+							"    if (status === '' || status === null) {",
+							"        // Field sent but empty - use default status 2",
+							"        pm.variables.set('status', '2');",
+							"        console.log('Status is empty in data file, using default: 2 (ACTIVE)');",
+							"    } else {",
+							"        // Field sent with value - use it",
+							"        pm.variables.set('status', status);",
+							"        console.log('Using status from data file:', status);",
+							"    }",
+							"}"
+						]
+					}
+				}
+			],
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Cookie",
+								"value": "SECRETTOKEN=379319eb0358576f73dbadc80f78db6589e39995fa6c4f566c86bd09a078d06b"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "{{name}}",
+									"type": "text"
+								},
+								{
+									"key": "mother_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "{{status}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/{{account}}/{{version}}/projects/create/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"{{account}}",
+								"{{version}}",
+								"projects",
 								"create",
 								""
 							]

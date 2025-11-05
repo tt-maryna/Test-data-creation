@@ -24,6 +24,8 @@ The file should contain a JSON array of timetracking objects. Each timetracking 
 - Must reference an existing user in the system
 - Common test values: `"1"`, `"38"`, `"39"`, etc.
 - Must be string format: `"1"`
+- **Multiple Users**: Can generate timetrackings for several users by providing their IDs
+- **Single File Storage**: All timetrackings for multiple users are stored in one `timetrackings.json` file
 
 ### Task ID (`task_id`)
 - Must reference an existing task in the system
@@ -219,6 +221,67 @@ June 2025 Working Days:
 
 ## Multiple Users and Tasks
 
+### Generating Data for Multiple Users
+When requested to generate timetracking data for several users:
+- **Provide User IDs**: Specify the exact user IDs to generate data for (e.g., users 40, 41, 42, 43, 44)
+- **Single File Output**: All timetrackings for all users are combined into one `timetrackings.json` file
+- **No Overlapping Times**: Ensure each user's timetrackings don't overlap with their own entries
+- **Independent Schedules**: Different users can have different working patterns and schedules
+- **Realistic Variation**: Add variety in start times, break patterns, and task assignments between users
+
+### Multiple Users Example:
+```json
+[
+  {
+    "user_id": "40",
+    "task_id": "4",
+    "start_time": "2025-11-04 08:00:00",
+    "end_time": "2025-11-04 12:00:00"
+  },
+  {
+    "user_id": "40",
+    "task_id": "9",
+    "start_time": "2025-11-04 12:00:00",
+    "end_time": "2025-11-04 12:30:00"
+  },
+  {
+    "user_id": "40",
+    "task_id": "4",
+    "start_time": "2025-11-04 12:30:00",
+    "end_time": "2025-11-04 16:30:00"
+  },
+  {
+    "user_id": "41",
+    "task_id": "5",
+    "start_time": "2025-11-04 09:00:00",
+    "end_time": "2025-11-04 13:00:00"
+  },
+  {
+    "user_id": "41",
+    "task_id": "9",
+    "start_time": "2025-11-04 13:00:00",
+    "end_time": "2025-11-04 13:45:00"
+  },
+  {
+    "user_id": "41",
+    "task_id": "7",
+    "start_time": "2025-11-04 13:45:00",
+    "end_time": "2025-11-04 17:00:00"
+  }
+]
+```
+
+### Multi-User Generation Guidelines:
+1. **User ID Validation**: Ensure all provided user IDs exist in the system
+2. **Time Distribution**: Spread users across different time slots to simulate realistic office scenarios
+3. **Task Variety**: Use different task IDs for different users to reflect varied work assignments
+4. **Schedule Variation**: 
+   - Some users start early (7:30-8:30 AM)
+   - Some users start later (8:30-9:30 AM) 
+   - Different break patterns (short vs. long lunch breaks)
+   - Varied end times (4:00-6:00 PM)
+5. **File Organization**: Group entries by user ID for better readability, then by date/time chronologically
+
 ### Multiple Users Example:
 ```json
 [
@@ -281,7 +344,9 @@ June 2025 Working Days:
 1. **Single User, Single Day**: 3-5 entries (8 hours work + breaks)
 2. **Single User, Full Week**: 15-25 entries (40 hours work + breaks across 5 days)
 3. **Single User, Full Month**: 60-80 entries (160 hours work + breaks across ~20 working days)
-4. **Multiple Users**: Multiply by number of users
+4. **Multiple Users, Single Day**: 3-5 entries per user (all stored in one file)
+5. **Multiple Users, Full Week**: 15-25 entries per user (all users combined in one file)
+6. **Multiple Users**: Multiply base entries by number of users, organize by user ID
 
 ### Weekly Planning (40-Hour Limit):
 - **Monday**: 8 hours work + breaks
@@ -433,6 +498,24 @@ June 2025 Working Days:
 ```
 
 ## Bulk Generation Strategies
+
+### Example Request Formats:
+When requesting timetracking data generation, you can specify:
+
+#### Single User:
+- "Generate timetracking data for user ID 40 for one week"
+- "Create timetrackings for user 38 for November 4-8, 2025"
+
+#### Multiple Users:
+- "Generate timetracking data for users 40, 41, 42, 43, 44 for one day"
+- "Create timetrackings for user IDs 38, 39, 40 for this week"
+- "Generate data for users with IDs 35, 36, 37, 38, 39 for November 4-8, 2025"
+
+#### Output Format:
+- All timetrackings will be combined into a single `timetrackings.json` file
+- Entries will be organized by user ID and then chronologically
+- Each user will have realistic work patterns with proper breaks
+- No overlapping times within individual user schedules
 
 ### Script-Based Generation:
 1. Define working days for the month

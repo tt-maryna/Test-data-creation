@@ -1,26 +1,24 @@
 [
   {
     "mother_id": "3",
-    "name": "Software Development",
+    "name": "Fixed Project Task",
     "is_billable": "true",
     "is_paid_non_working": "false",
     "is_nonworking": "false",
     "task_type": "is_billable"
   },
   {
-    "mother_id": "3",
-    "name": "Project Management",
+    "name": "Dynamic Assignment Task 1",
     "is_billable": "true",
     "is_paid_non_working": "false",
     "is_nonworking": "false",
     "task_type": "is_billable"
   },
   {
-    "mother_id": "3",
-    "name": "Client Consultation",
-    "is_billable": "true",
-    "is_paid_non_working": "false",
+    "name": "Dynamic Assignment Task 2",
+    "is_billable": "false",
+    "is_paid_non_working": "true",
     "is_nonworking": "false",
-    "task_type": "is_billable"
+    "task_type": "is_paid_non_working"
   }
 ]

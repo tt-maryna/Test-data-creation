@@ -1,7 +1,7 @@
 # Time Tracking API - Context for GitHub Copilot
 
 ## Overview
-This document provides context about a Time Tracking API based on the Postman collection `test.postman_collection.json`. Use this information to understand the API structure, endpoints, and parameters when generating code or providing suggestions.
+This document provides context about a Time Tracking API based on the Postman collection `test_collection.json`. Use this information to understand the API structure, endpoints, and parameters when generating code or providing suggestions.
 
 ## TestProject Structure
 
@@ -13,17 +13,35 @@ TestProject/
 │   ├── instructions.md                # Instructions for generating each test data file
 │   ├── API_CONTEXT.md                 # API documentation and context
 │   ├── users_instruction.md           # Instructions for generating users.json
-│   └── timetrackings_instruction.md   # Instructions for generating timetrackings.json
+│   ├── timetrackings_instruction.md   # Instructions for generating timetrackings.json
+│   ├── tasks_instruction.md           # Instructions for generating tasks.json (with smart assignment)
+│   └── projects_instruction.md        # Instructions for generating projects.json
 ├── test_data/
 │   ├── departments.json               # Test data for departments endpoint
-│   ├── tasks.json                     # Test data for tasks endpoint
-│   ├── timetrackings.json            # Test data for timetrackings endpoint
-│   └── users.json                     # Test data for users endpoint
+│   ├── users.json                     # Test data for users endpoint (with smart dept assignment)
+│   ├── projects.json                  # Test data for projects endpoint (with status field)
+│   ├── tasks.json                     # Test data for tasks endpoint (with smart project assignment)
+│   └── timetrackings.json            # Test data for timetrackings endpoint
 ├── stage-env.json                     # Global environment variables for collection
-├── test_collection.json               # Postman collection with API requests
+├── test_collection.json               # Postman collection with API requests and smart assignment logic
 ├── timetac-dev-ca.crt                # Timetac certificate for secure Newman execution
-└── create_test_data.sh               # Bash script for automated request execution
+├── create_test_data.sh               # Enhanced bash script with ID extraction and smart assignment
+├── output.txt                         # Execution logs and API responses (generated)
+└── temp_extracted_ids.json           # Temporary file for extracted IDs (generated)
 ```
+
+### New Features Added:
+
+#### 🔗 Smart Assignment System
+- **Projects → Tasks**: Tasks automatically inherit project IDs from previously created projects
+- **Departments → Users**: Users automatically assign to newly created departments  
+- **Fallback Defaults**: Graceful fallback when no extracted IDs are available
+- **ID Extraction**: Real-time parsing of `output.txt` for newly created entity IDs
+
+#### 📚 Enhanced Documentation
+- **README.md**: Comprehensive project overview with usage examples
+- **QUICK_REFERENCE.md**: Common commands and debugging guide
+- **Enhanced Instructions**: Updated with smart assignment behavior documentation
 
 ### Folder and File Descriptions:
 
@@ -34,6 +52,8 @@ TestProject/
   - `API_CONTEXT.md` - API documentation and context
   - `users_instruction.md` - instructions for generating users.json
   - `timetrackings_instruction.md` - instructions for generating timetrackings.json
+  - `tasks_instruction.md` - instructions for generating tasks.json (with smart assignment docs)
+  - `projects_instruction.md` - instructions for generating projects.json
 
 #### `test_data/` Directory  
 - **Purpose**: Contains JSON test data files for each API endpoint
@@ -43,6 +63,7 @@ TestProject/
   - `tasks.json` - Task creation data
   - `timetrackings.json` - Time tracking entries data
   - `users.json` - User creation data
+  - `projects.json` - Project creation data
 
 #### Core Configuration Files
 - **`stage-env.json`**: Global environment variables used throughout the collection
