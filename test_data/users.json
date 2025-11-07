@@ -1,25 +1,30 @@
 [
   {
-    "email_address": "anna.mueller@timetac.com",
-    "username": "anna.mueller@timetac.com",
-    "department_id": "1",
-    "lastname": "Mueller",
-    "firstname": "Anna",
-    "language_id": "2"
+    "email_address": "sophia.chen@timetac.com",
+    "username": "sophia.chen@timetac.com",
+    "lastname": "Chen",
+    "firstname": "Sophia",
+    "language_id": "1",
+    "timesheet_template_id_valid_starting_from": "2025-01-01"
   },
   {
-    "email_address": "carlos.rodriguez@timetac.com",
-    "username": "carlos.rodriguez@timetac.com",
-    "lastname": "Rodriguez",
-    "firstname": "Carlos",
-    "language_id": "1"
-  },
-  {
-    "email_address": "emma.watson@timetac.com",
-    "username": "emma.watson@timetac.com",
+    "email_address": "miguel.santos@timetac.com",
+    "username": "miguel.santos@timetac.com",
     "department_id": "",
-    "lastname": "Watson",
-    "firstname": "Emma",
-    "language_id": "2"
+    "lastname": "Santos",
+    "firstname": "Miguel",
+    "language_id": "3",
+    "timesheet_template_id": "",
+    "timesheet_template_id_valid_starting_from": "2025-01-01"
+  },
+  {
+    "email_address": "alexandra.novak@timetac.com",
+    "username": "alexandra.novak@timetac.com",
+    "lastname": "Novak",
+    "firstname": "Alexandra",
+    "language_id": "2",
+    "timesheet_template_id_valid_starting_from": "2025-01-01",
+    "department_id_valid_from": "",
+    "payroll_accountings_starts_at": "2024-10-15"
   }
 ]

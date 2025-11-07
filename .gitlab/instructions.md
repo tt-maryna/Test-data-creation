@@ -15,13 +15,15 @@ TestProject/
 │   ├── users_instruction.md           # Instructions for generating users.json
 │   ├── timetrackings_instruction.md   # Instructions for generating timetrackings.json
 │   ├── tasks_instruction.md           # Instructions for generating tasks.json (with smart assignment)
-│   └── projects_instruction.md        # Instructions for generating projects.json
+│   ├── projects_instruction.md        # Instructions for generating projects.json
+│   └── absences_instruction.md        # Instructions for generating absences.json
 ├── test_data/
 │   ├── departments.json               # Test data for departments endpoint
 │   ├── users.json                     # Test data for users endpoint (with smart dept assignment)
 │   ├── projects.json                  # Test data for projects endpoint (with status field)
 │   ├── tasks.json                     # Test data for tasks endpoint (with smart project assignment)
-│   └── timetrackings.json            # Test data for timetrackings endpoint
+│   ├── timetrackings.json            # Test data for timetrackings endpoint
+│   └── absences.json                  # Test data for absences endpoint
 ├── stage-env.json                     # Global environment variables for collection
 ├── test_collection.json               # Postman collection with API requests and smart assignment logic
 ├── timetac-dev-ca.crt                # Timetac certificate for secure Newman execution
@@ -54,6 +56,7 @@ TestProject/
   - `timetrackings_instruction.md` - instructions for generating timetrackings.json
   - `tasks_instruction.md` - instructions for generating tasks.json (with smart assignment docs)
   - `projects_instruction.md` - instructions for generating projects.json
+  - `absences_instruction.md` - instructions for generating absences.json
 
 #### `test_data/` Directory  
 - **Purpose**: Contains JSON test data files for each API endpoint
@@ -64,6 +67,7 @@ TestProject/
   - `timetrackings.json` - Time tracking entries data
   - `users.json` - User creation data
   - `projects.json` - Project creation data
+  - `absences.json` - Absence records data (vacation, sick leave, home office)
 
 #### Core Configuration Files
 - **`stage-env.json`**: Global environment variables used throughout the collection
@@ -281,5 +285,45 @@ const stopTracking = {
   geo_end_accuracy: "100"
 };
 ```
+
+### Creating an absence:
+```javascript
+const absence = {
+  user_id: "1",
+  type_id: "1",  // 1 = Vacation, 3 = Other
+  subtype_id: "0",  // For type_id=1: subtype_id=0 (vacation)
+                     // For type_id=3: subtype_id=11 (sick leave) or 12 (home office)
+  from_date: "2025-09-22",
+  to_date: "2025-09-22",
+  duration: "1",  // Full day
+  replacement_user_id: "0"
+};
+```
+
+## Absences API
+
+### Create Absence
+**POST** `{{url}}/{{account}}/{{version}}/absences/create/`
+
+Required Body Parameters:
+- `user_id`: User identifier
+- `type_id`: Absence type (`1` = Vacation, `3` = Other types)
+- `subtype_id`: Absence subtype (depends on `type_id`)
+  - If `type_id = 1`: `subtype_id = 0` (Vacation day off)
+  - If `type_id = 3`: `subtype_id = 11` (Sick leave) or `12` (Home office)
+- `from_date`: Start date (format: "YYYY-MM-DD")
+- `to_date`: End date (format: "YYYY-MM-DD", must be >= `from_date`)
+- `duration`: Duration in days
+  - Single day (`from_date = to_date`): `0.5` or `1`
+  - Multiple days: Number of days (inclusive)
+- `replacement_user_id`: Replacement user (always `0`)
+
+Duration Calculation:
+- For single day: `0.5` (half day) or `1` (full day)
+- For date range: `duration = (to_date - from_date) + 1`
+
+Examples:
+- Single day vacation: `from_date = to_date = "2025-09-22"`, `duration = "1"`
+- Multi-day sick leave: `from_date = "2025-10-15"`, `to_date = "2025-10-17"`, `duration = "3"`
 
 This API follows RESTful conventions with specialized endpoints for time tracking operations like start/stop/toggle functionality commonly needed in time tracking applications.

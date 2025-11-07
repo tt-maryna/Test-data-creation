@@ -21,6 +21,9 @@ The file should contain a JSON array of user objects. Each user object represent
 ### Optional Fields with Smart Assignment Logic
 - `department_id`: Department assignment (string/number)
 - `timesheet_template_id`: Work schedule assignment (string/number)
+- `timesheet_template_id_valid_starting_from`: Start date for timesheet template validity (string, format: YYYY-MM-DD)
+- `department_id_valid_from`: Start date for department assignment validity (string, format: YYYY-MM-DD)
+- `payroll_accountings_starts_at`: Start date for payroll accounting (string, format: YYYY-MM-DD)
 
 ## Smart Assignment Logic
 
@@ -64,6 +67,57 @@ The file should contain a JSON array of user objects. Each user object represent
    "timesheet_template_id": ""
    ```
 
+### Timesheet Template Valid Starting From (`timesheet_template_id_valid_starting_from`)
+Date field that specifies when the assigned timesheet template becomes valid.
+
+1. **Field provided with value** → Uses the specified date
+   ```json
+   "timesheet_template_id_valid_starting_from": "2024-10-01"
+   ```
+
+### Department Valid From (`department_id_valid_from`)
+Date field that specifies when the assigned department becomes valid.
+
+1. **Field provided with value** → Uses the specified date
+   ```json
+   "department_id_valid_from": "2024-10-01"
+   ```
+
+### Payroll Accountings Starts At (`payroll_accountings_starts_at`)
+Date field that specifies when payroll accounting begins. **Always matches** `timesheet_template_id_valid_starting_from`.
+
+1. **Field provided with value** → Uses the specified date (but may be adjusted by validation rules)
+   ```json
+   "payroll_accountings_starts_at": "2024-10-01"
+   ```
+
+2. **Field not included** → Uses the same value as `timesheet_template_id_valid_starting_from`
+   ```json
+   {
+     "email_address": "user@example.com",
+     "username": "user@example.com"
+     // payroll_accountings_starts_at field is missing
+   }
+   ```
+
+3. **Field included but empty** → Uses the same value as `timesheet_template_id_valid_starting_from`
+   ```json
+   "payroll_accountings_starts_at": ""
+   ```
+
+## Date Validation Rules
+
+⚠️ **Important**: The system enforces the following date constraints:
+
+1. **`payroll_accountings_starts_at`** = **`timesheet_template_id_valid_starting_from`** (always the same)
+2. **`timesheet_template_id_valid_starting_from`** ≥ **`payroll_accountings_starts_at`** (cannot be earlier)
+3. **`department_id_valid_from`** ≥ **`payroll_accountings_starts_at`** (cannot be earlier)
+
+### Automatic Date Adjustment
+If validation rules are violated, the system will automatically adjust dates:
+- If `timesheet_template_id_valid_starting_from` < `payroll_accountings_starts_at` → Adjusted to match `payroll_accountings_starts_at`
+- If `department_id_valid_from` < `payroll_accountings_starts_at` → Adjusted to match `payroll_accountings_starts_at`
+
 ## Example Users.json File
 
 ```json
@@ -75,7 +129,10 @@ The file should contain a JSON array of user objects. Each user object represent
     "lastname": "Johnson",
     "firstname": "Sarah",
     "language_id": "1",
-    "timesheet_template_id": "4"
+    "timesheet_template_id": "4",
+    "timesheet_template_id_valid_starting_from": "2024-10-01",
+    "department_id_valid_from": "2024-09-20",
+    "payroll_accountings_starts_at": "2024-10-01"
   },
   {
     "email_address": "michael.davis@timetac.com",
@@ -97,9 +154,9 @@ The file should contain a JSON array of user objects. Each user object represent
 ```
 
 ### Example Explanation:
-- **Sarah Johnson**: Uses provided department ID `1` and timesheet template ID `4`
-- **Michael Davis**: Gets random department and workschedule (fields not included)
-- **Lisa White**: Gets default value `1` for both fields (fields included but empty)
+- **Sarah Johnson**: Uses provided department ID `1` and timesheet template ID `4`, with custom validity dates. Note: `payroll_accountings_starts_at` matches `timesheet_template_id_valid_starting_from`, and `department_id_valid_from` is adjusted to not be earlier than payroll date.
+- **Michael Davis**: Gets random department and workschedule (fields not included), uses default dates `2024-09-17` for all date fields
+- **Lisa White**: Gets default value `1` for both ID fields (fields included but empty), uses default dates `2024-09-17` for all date fields
 
 ## Field Values and Constraints
 
@@ -145,6 +202,36 @@ The collection automatically fetches available options before user creation:
 2. **Validate JSON**: Ensure proper JSON syntax (use JSON validator if needed)
 3. **Run the collection**: Execute with `./create_test_data.sh users`
 4. **Check logs**: Review output for assignment logic and any errors
+
+## Date Field Examples
+
+### Valid Date Configuration:
+```json
+{
+  "email_address": "valid.dates@timetac.com",
+  "username": "valid.dates@timetac.com",
+  "lastname": "Valid",
+  "firstname": "Dates",
+  "language_id": "1",
+  "timesheet_template_id_valid_starting_from": "2024-10-01",
+  "department_id_valid_from": "2024-10-01",
+  "payroll_accountings_starts_at": "2024-10-01"
+}
+```
+
+### Invalid Date Configuration (Will Be Auto-Corrected):
+```json
+{
+  "email_address": "invalid.dates@timetac.com",
+  "username": "invalid.dates@timetac.com",
+  "lastname": "Invalid",
+  "firstname": "Dates",
+  "language_id": "1",
+  "timesheet_template_id_valid_starting_from": "2024-09-15",  // Will be adjusted to 2024-10-01
+  "department_id_valid_from": "2024-09-10",                   // Will be adjusted to 2024-10-01
+  "payroll_accountings_starts_at": "2024-10-01"
+}
+```
 
 ## Tips for Bulk Generation
 

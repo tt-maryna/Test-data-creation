@@ -1,13 +1,39 @@
 [
   {
-    "name": "Website Redesign",
+    "name": "E-Commerce Platform Development",
     "status": "2"
   },
   {
-    "name": "Mobile App Development",
+    "name": "Customer Portal Redesign",
+    "status": "2"
+  },
+  {
+    "name": "Mobile Banking App",
     "status": "1"
   },
   {
-    "name": "Database Migration"
+    "name": "Data Analytics Dashboard"
+  },
+  {
+    "name": "Cloud Infrastructure Migration",
+    "status": "2"
+  },
+  {
+    "name": "AI Chatbot Implementation",
+    "status": "1"
+  },
+  {
+    "name": "Inventory Management System"
+  },
+  {
+    "name": "Social Media Integration",
+    "status": "2"
+  },
+  {
+    "name": "Payment Gateway Upgrade",
+    "status": "1"
+  },
+  {
+    "name": "Security Audit Platform"
   }
 ]

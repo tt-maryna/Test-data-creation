@@ -38,6 +38,7 @@ declare -A FOLDER_DATA_MAP=(
     ["users"]="test_data/users.json"
     ["tasks"]="test_data/tasks.json"
     ["projects"]="test_data/projects.json"
+    ["absences"]="test_data/absences.json"
 )
 
 # Logging function
