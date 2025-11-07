@@ -9,7 +9,7 @@
     },
     {
       "key": "account",
-      "value": "igomfff",
+      "value": "REPLACE_WITH_YOUR_ACCOUNT",
       "enabled": true
     },
     {
@@ -19,12 +19,12 @@
     },
     {
       "key": "username", 
-      "value": "noreply@timetac.com",
+      "value": "REPLACE_WITH_YOUR_USERNAME",
       "enabled": true
     },
     {
       "key": "password",
-      "value": "12345aC!",
+      "value": "REPLACE_WITH_YOUR_PASSWORD",
       "enabled": true
     },
     {
@@ -34,7 +34,7 @@
     },
     {
       "key": "client_secret",
-      "value": "997a4761c723a56ac4a2a3de7fa6e03bdab59db4a8929fcb9641f8a25224476c",
+      "value": "REPLACE_WITH_YOUR_CLIENT_SECRET",
       "enabled": true
     }
   ],
