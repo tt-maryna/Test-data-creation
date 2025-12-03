@@ -1,6 +1,4 @@
 output.txt
 .env
-stage-env.json
 *.env.local
 temp_extracted_ids.json
-test_data/

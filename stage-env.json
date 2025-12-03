@@ -1,0 +1,42 @@
+{
+  "id": "stage-env-id",
+  "name": "Stage Environment",
+  "values": [
+    {
+      "key": "url",
+      "value": "https://api-stage.timetac.com",
+      "enabled": true
+    },
+    {
+      "key": "account",
+      "value": "igomfff",
+      "enabled": true
+    },
+    {
+      "key": "version",
+      "value": "v6",
+      "enabled": true
+    },
+    {
+      "key": "username", 
+      "value": "noreply@timetac.com",
+      "enabled": true
+    },
+    {
+      "key": "password",
+      "value": "12345aC!",
+      "enabled": true
+    },
+    {
+      "key": "client_id",
+      "value": "WEB",
+      "enabled": true
+    },
+    {
+      "key": "client_secret",
+      "value": "997a4761c723a56ac4a2a3de7fa6e03bdab59db4a8929fcb9641f8a25224476c",
+      "enabled": true
+    }
+  ],
+  "_postman_variable_scope": "environment"
+}
