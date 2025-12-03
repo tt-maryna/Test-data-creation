@@ -25,6 +25,6 @@
     "language_id": "2",
     "timesheet_template_id_valid_starting_from": "2025-01-01",
     "department_id_valid_from": "",
-    "payroll_accountings_starts_at": "2024-10-15"
+    "payroll_accounting_starts_at": "2024-10-15"
   }
 ]
