@@ -4,37 +4,37 @@
   "values": [
     {
       "key": "url",
-      "value": "https://api-stage.timetac.com",
+      "value": "REPLACE_WITH_API_URL",
       "enabled": true
     },
     {
       "key": "account",
-      "value": "igomfff",
+      "value": "REPLACE_WITH_YOUR_ACCOUNT",
       "enabled": true
     },
     {
       "key": "version",
-      "value": "v6",
+      "value": "REPLACE_WITH_API_VERSION",
       "enabled": true
     },
     {
       "key": "username", 
-      "value": "noreply@timetac.com",
+      "value": "REPLACE_WITH_YOUR_USERNAME",
       "enabled": true
     },
     {
       "key": "password",
-      "value": "12345aC!",
+      "value": "REPLACE_WITH_YOUR_PASSWORD",
       "enabled": true
     },
     {
       "key": "client_id",
-      "value": "WEB",
+      "value": "REPLACE_WITH_CLIENT_ID",
       "enabled": true
     },
     {
       "key": "client_secret",
-      "value": "997a4761c723a56ac4a2a3de7fa6e03bdab59db4a8929fcb9641f8a25224476c",
+      "value": "REPLACE_WITH_CLIENT_SECRET",
       "enabled": true
     }
   ],
